@@ -13,14 +13,43 @@ class Piece
 
   def to_s
     if self.color == :white
-      'wit'
+      self.king ? 'WWW' : 'wit'
     else
-      'blk'
+      self.king ? 'BBB' : 'blk'
     end
   end
 
-  def return_moves
-    @
+  def position=(position)
+    if (:white and position[0] == 7) || (:black and position[0] == 0)
+      @king = true
+      @deltas = [[1,1], [1,-1], [-1,1], [-1,-1]]
+    end
+    @position = position
+  end
+
+
+  def slide_moves
+    s_moves = {:moves => [], :taken => []}
+    self.deltas.each do |pair|
+      row, col = pair
+      p_row, p_col = [self.position[0] + row, self.position[1] + col]
+      unless board[p_row][p_col]
+         s_moves[:moves] << [p_row, p_col]
+       else
+         s_moves[:taken] << [p_row, p_col]
+      end
+    end
+    s_moves
+  end
+
+  def jump_moves(slide_moves)
+    j_moves = {:landing = [], :to_take =[]}
+    slide_moves[:taken].each do |place|
+      row, col = place
+      if board[row][col].color != self.color
+        if board
+      end
+    end
   end
 end
 
@@ -33,6 +62,7 @@ class Board
   end
 
   def display
+    row_indicator = 'a'
     self.grid.each do |row|
       temp = []
       row.each do |el|
@@ -42,7 +72,8 @@ class Board
           temp.push(' ')
         end
       end
-      puts "#{temp}"
+      puts "#{row_indicator}|#{temp}"
+      row_indicator = row_indicator.next
     end
   end
 
