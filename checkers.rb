@@ -1,6 +1,9 @@
 require '/Users/appacademy/Desktop/w2d5/pieces.rb'
 require '/Users/appacademy/Downloads/board.rb'
 
+# REV: It looks like your Board class is missing from Github, so this is a bit confusing to read. But I'll do my best!
+
+# REV: Your Game class is quite long. Some of these methods might be better off in your Board or Piece classes, or in a Player class.
 class Game
   attr_accessor :board, :inputs
   def initialize
@@ -24,7 +27,7 @@ class Game
       ending = placement_moves
     end
   end
-
+  # REV: These are two good examples of methods that should go in the Piece class.
   def perform_jump(beginning, ending)
     switch_places(beginning, ending)
     taken(beginning, ending)
@@ -39,7 +42,7 @@ class Game
   def display
     self.board.display
   end
-
+  # REV: The next four methods would be good ones to put in either your Board or Piece classes.
   def slide_moves(start)
     s_moves = []
     s = self.board.grid[start[0]][start[1]]
@@ -73,6 +76,7 @@ class Game
     j_moves = []
     self.board.grid[pos[0]][pos[1]].deltas.each do |pair|
       row, col = pair
+      # REV: Parentheses might make this line read easier, and you can put a line break after one of the boolean operators.
       unless slides.include?([pos[0]+row,pos[1]+col]) or @board.grid[pos[0]][pos[1]].color == @board.grid[pos[0]+row][pos[1]+col].color
         j_moves << [pos[0]+row, pos[1]+col]
       end
@@ -85,7 +89,7 @@ class Game
     e_row, e_col = ending
     @board.grid[e_row][e_col], @board.grid[b_row][b_col] = @board.grid[b_row][b_col], nil
   end
-
+  # REV: This might be a good one for a Player class?
   def placement_input
     placements = gets.chomp.gsub(',', ' ').split
     placement_array = []
