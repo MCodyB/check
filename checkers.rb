@@ -1,13 +1,20 @@
 require '/Users/appacademy/Desktop/w2d5/pieces.rb'
 require '/Users/appacademy/Downloads/board.rb'
-
+# REV: couldn't find the board so only reviewing checkers and pieces
+# REV: this class has too many responsibilities
+# REV: almost every method other than initialize and play should be private
+# REV: sometimes you set row, col = position, sometimes you don't
+# REV: should use exceptions for illegal moves
+# REV: sometimes you use start as your variable name, other times beginning
 class Game
   attr_accessor :board, :inputs
   def initialize
     @board = Board.new
+    # REV: inputs should be a class constant
     @inputs = {'a'=>0, 'b'=>1, 'c'=>2, 'd'=>3,'e'=>4, 'f'=>5, 'g'=>6, 'h'=>7}
   end
 
+  # REV: playing an individual turn should be in a separate method
   def play
     puts "Welcome to the game"
     white_turn = true
@@ -18,6 +25,7 @@ class Game
       beginning = starting_point
       valid_choice?(beginning, wb)
 
+      # REV: the next few lines don't do anything
       slides = slide_moves(beginning)
       jumps = jump_moves(slides, beginning)
       "#{wb}, enter let and num (ex: a1) to choose placement, or separate with a comma or space for multiple jumps"
@@ -33,6 +41,7 @@ class Game
   def perform_slide(beginning, ending)
     b_row, b_col = beginning
     e_row, e_col = ending
+    # REV: you should not access the grid directly, but go through an interface provided by the board
     @board.grid[e_row][e_col], @board.grid[b_row][b_col] = @board.grid[b_row][b_col], nil
   end
 
@@ -40,6 +49,7 @@ class Game
     self.board.display
   end
 
+  # REV: the next few methods should be managed by the piece or board
   def slide_moves(start)
     s_moves = []
     s = self.board.grid[start[0]][start[1]]
@@ -80,12 +90,14 @@ class Game
     j_moves
   end
 
+  # REV: should be handled by the board
   def switch_places(beginning, ending)
     b_row, b_col = beginning
     e_row, e_col = ending
     @board.grid[e_row][e_col], @board.grid[b_row][b_col] = @board.grid[b_row][b_col], nil
   end
 
+  # REV: there should be a player class that handles this
   def placement_input
     placements = gets.chomp.gsub(',', ' ').split
     placement_array = []
@@ -114,6 +126,7 @@ class Game
     end
   end
 
+  # REV: methods ending with a ? should only return true or false
   def over_for_b_or_w?
     w = 0
     b = 0

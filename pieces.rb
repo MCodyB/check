@@ -1,4 +1,7 @@
 class Piece
+  # REV: color should be read-only
+  # REV: king shouldn't be able to change from true to false
+  # REV: deltas should be private and based off a class constant
   attr_accessor :color, :deltas, :king, :position
   def initialize(color, position)
     @position = position
